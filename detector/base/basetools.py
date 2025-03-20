@@ -175,3 +175,20 @@ def combine_boxes(bboxes, distance_thres=50):
         merged[i] = True  # Mark as merged
 
     return np.array(combined_bboxes)
+
+def conv_boxes_to_boxes_norm(boxes, max_height, max_width):
+    """
+    Normalize bounding boxes by dividing x-coordinates by max_width and y-coordinates by max_height.
+
+    Args:
+        boxes (list or np.ndarray): Bounding boxes in [x_min, y_min, x_max, y_max] format.
+        max_height (int or float): Maximum image height.
+        max_width (int or float): Maximum image width.
+
+    Returns:
+        np.ndarray: Normalized bounding boxes in [x_min, y_min, x_max, y_max] format.
+    """
+    boxes_np = np.asarray(boxes, dtype=np.float32)
+    boxes_np[:, [0, 2]] /= max_width   # Normalize x_min and x_max
+    boxes_np[:, [1, 3]] /= max_height  # Normalize y_min and y_max
+    return boxes_np.astype(np.int32)
