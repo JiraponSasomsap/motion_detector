@@ -2,22 +2,29 @@ from abc import ABC, abstractmethod
 import cv2
 import numpy as np 
 from .basetools import (ignore_areas, 
-                        interested_areas,)
+                        interested_areas,
+                        conv_boxes_to_boxes_norm,)
+from typing import Union, List, Tuple
 
 class _GetResults:
     def __init__(self, base:'BaseMotionDetector'):
         self.__base = base
+    
+    @property
+    def boxes_n(self) -> List[Tuple[float, float, float, float]]:
+        boxes_norm = conv_boxes_to_boxes_norm(self.__base.boxes)
+        return boxes_norm
 
     @property
-    def frame1(self):
+    def frame1(self) -> cv2.typing.MatLike:
         return self.__base.frame1
     
     @property
-    def frame2(self):
+    def frame2(self) -> cv2.typing.MatLike:
         return self.__base.frame2
 
     @property
-    def boxes(self):
+    def boxes(self) -> List[Tuple[int, int, int, int]]:
         return self.__base.boxes
 
     @property
@@ -99,10 +106,12 @@ class BaseMotionDetector(ABC):
         self.frame1 = None
         self.frame2 = None
 
+    @property
     @abstractmethod
     def boxes(self):
         pass
     
+    @property
     @abstractmethod
     def immask(self):
         pass

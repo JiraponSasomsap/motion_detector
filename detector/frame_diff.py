@@ -28,7 +28,6 @@ class FrameDiff(BaseMotionDetector):
     
     @property
     def boxes(self):
-        
         h, w = self.frame1.shape[:2]
         h_ths = h*self.boxAreaThresh
         w_ths = w*self.boxAreaThresh
